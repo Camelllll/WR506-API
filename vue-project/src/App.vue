@@ -10,12 +10,14 @@ import MoviesView from './views/MoviesView.vue';
   <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
-    <div class="wrapper">
       <nav>
         <RouterLink to="/actors">Acteurs</RouterLink>
         <RouterLink to="/movies">Films</RouterLink>
       </nav>
-    </div>
+
+      <main>
+        <HelloWorld />
+      </main>
   </header>
 
   <RouterView />
