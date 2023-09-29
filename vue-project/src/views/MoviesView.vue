@@ -1,24 +1,7 @@
-<template>
-  <div class="movie-list">
-    <h1>Liste des Films</h1> <br>
-    <ul class="movie-items">
-      <li v-for="movie in movies" :key="movie.id" class="movie-item">
-        <div class="movie-details">
-          <h2>{{ movie.title }}</h2>
-          <p>{{ movie.description }}</p>
-        </div>      
-        <div class="movie-details">
-          
-          
-        </div>     
-      </li>
-    </ul>
-    <br>
-  </div>
-</template>
-
 <script>
 import ApiService from '@/api.js';
+import { RouterLink, RouterView } from 'vue-router'
+
 
 export default {
   data() {
@@ -42,6 +25,25 @@ export default {
   },
 };
 </script>
+
+<template>
+  <div class="movie-list">
+    <h1>Liste des Films</h1> <br>
+    <ul class="movie-items">
+      <li v-for="movie in movies" :key="movie.id" class="movie-item">
+        <div class="movie-details">
+          <h2>{{ movie.title }}</h2>
+          <p>{{ movie.description }}</p>
+        </div>      
+        <div class="movie-details">
+          <RouterLink :to="{ name: 'movie-details', params: { id: movie.id } }">Voir les détails</RouterLink>
+        </div>
+        
+      </li>
+    </ul>
+    <br>
+  </div>
+</template>
 
 <style scoped>
 
