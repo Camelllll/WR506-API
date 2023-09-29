@@ -3,9 +3,6 @@
     <h1>Liste des Films</h1>
     <ul class="movie-items">
       <li v-for="movie in movies" :key="movie.id" class="movie-item">
-        <div class="movie-image">
-          <img :src="movie.poster" :alt="movie.title" />
-        </div>
         <div class="movie-details">
           <h2>{{ movie.title }}</h2>
           <p>{{ movie.description }}</p>
@@ -16,30 +13,35 @@
 </template>
 
 <script>
+import ApiService from '@/api.js';
+
 export default {
   data() {
     return {
-      movies: [
-        {
-          id: 1,
-          title: 'Film 1',
-          description: 'Description du Film 1',
-          poster: '/images/movie1.jpg',
-        },
-        {
-          id: 2,
-          title: 'Film 2',
-          description: 'Description du Film 2',
-          poster: '/images/movie2.jpg',
-        },
-        // Ajoutez d'autres films ici
-      ],
+      movies: [],
     };
+  },
+  mounted() {
+    ApiService.getMovies()
+      .then((response) => {
+        this.movies = response.data['hydra:member'].map((movie) => ({
+          id: movie.id,
+          title: movie.title,
+          description: movie.description,
+        }));
+      })
+      .catch((error) => {
+        console.error('Erreur lors de la récupération des films depuis l\'API:', error);
+      });
   },
 };
 </script>
 
 <style scoped>
+
+.movie-details {
+  text-align: center;
+}
 .movie-list {
   text-align: center;
   padding: 20px;
@@ -51,6 +53,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  color: rgb(255, 255, 255);
 }
 
 .movie-item {
@@ -60,7 +63,7 @@ export default {
   padding: 10px;
   width: 300px;
   text-align: left;
-  background-color: #fff;
+  background-color: #404040;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 

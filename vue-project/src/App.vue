@@ -1,6 +1,5 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 import ActorsView from './views/ActorsView.vue';
 import MoviesView from './views/MoviesView.vue';
 
@@ -16,7 +15,6 @@ import MoviesView from './views/MoviesView.vue';
       </nav>
 
       <main>
-        <HelloWorld />
       </main>
   </header>
 
