@@ -1,14 +1,19 @@
 <template>
   <div class="movie-list">
-    <h1>Liste des Films</h1>
+    <h1>Liste des Films</h1> <br>
     <ul class="movie-items">
       <li v-for="movie in movies" :key="movie.id" class="movie-item">
         <div class="movie-details">
           <h2>{{ movie.title }}</h2>
           <p>{{ movie.description }}</p>
-        </div>
+        </div>      
+        <div class="movie-details">
+          
+          
+        </div>     
       </li>
     </ul>
+    <br>
   </div>
 </template>
 
@@ -28,6 +33,7 @@ export default {
           id: movie.id,
           title: movie.title,
           description: movie.description,
+          releaseDate: movie.releaseDate,
         }));
       })
       .catch((error) => {
