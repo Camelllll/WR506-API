@@ -29,5 +29,5 @@ export default {
   getCategoriesById(categoryId) {
     const url = `${'https://127.0.0.1:8000/api'}/categories/${categoryId}`;
     return axios.get(url);
-  }
+  }, 
 };
