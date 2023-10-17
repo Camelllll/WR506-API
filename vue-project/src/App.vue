@@ -1,6 +1,5 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 import ActorsView from './views/ActorsView.vue';
 import MoviesView from './views/MoviesView.vue';
 
@@ -10,12 +9,14 @@ import MoviesView from './views/MoviesView.vue';
   <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
-    <div class="wrapper">
       <nav>
         <RouterLink to="/actors">Acteurs</RouterLink>
         <RouterLink to="/movies">Films</RouterLink>
+        <RouterLink to="/categories">Catégories</RouterLink>
       </nav>
-    </div>
+
+      <main>
+      </main>
   </header>
 
   <RouterView />
