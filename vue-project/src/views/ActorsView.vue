@@ -5,19 +5,33 @@ import { RouterLink } from 'vue-router'
 
 const actors = ref([])
 
-onMounted(() => {
-  ApiService.getActors()
-    .then((response) => {
+onMounted(async () => { 
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.$router.push('/');
+      return;
+    }
+
+    const response = await ApiService.getActors({
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+      },
+    });
+
+    if (response.data && response.data['hydra:member']) {
       actors.value = response.data['hydra:member'].map((actor) => ({
         id: actor.id,
         firstName: actor.firstName,
-        lastName: actor.lastName, 
-      }))
-    })
-    .catch((error) => {
-      console.error('Erreur lors de la récupération des acteurs depuis l\'API:', error)
-    })
-})
+        lastName: actor.lastName,
+      }));
+    }
+  } catch (error) {
+    console.error('Error fetching actors:', error);
+  }
+});
+
 </script>
 
 
@@ -28,7 +42,7 @@ onMounted(() => {
     <ul class="actor-items">
       <li v-for="actor in actors" :key="actor.id" class="actor-item">
         <div class="actor-details">
-          <h2>{{ actor.firstName }} {{ actor.lastName }}</h2> <!-- Affichez le prénom et le nom de famille -->
+          <h2>{{ actor.firstName }} {{ actor.lastName }}</h2> 
         </div>
         <RouterLink :to="{ name: 'actor-details', params: { id: actor.id } }">Voir les détails</RouterLink>
       </li>
