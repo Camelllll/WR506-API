@@ -54,7 +54,6 @@ const getMovies = async (pageNumber) => {
       <li v-for="movie in movies" :key="movie.id" class="movie-item">
         <div class="movie-details">
           <h2>{{ movie.title }}</h2>
-          <p>{{ movie.description }}</p>
         </div>
         <div class="movie-details">
           <RouterLink :to="{ name: 'movie-details', params: { id: movie.id } }">Voir les détails</RouterLink>

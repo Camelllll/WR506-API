@@ -5,28 +5,24 @@ import ApiService from '@/api.js';
 
 const categories = ref([]);
 const searchQuery = ref('');
-const category = ref({
-  name: '',
-});
 const itemPerPage = 3;
 const currentPage = ref(1);
 const showModal = ref(false);
-const previousPage = computed(() => currentPage.value - 1);
+const category = ref({
+  name: '',
+});
 
 const addCategory = async () => {
   try {
     const response = await ApiService.addCategory({ name: category.value.name });
-    const newCategory = {
-      id: response.data.id,
-      name: response.data.name,
-    };
-    categories.value.push(newCategory);
-    category.value.name = '';
-    showModal.value = true;
+    console.log('Category added successfully:', response.data);
+    showModal.value = false;
   } catch (error) {
     console.error('Error adding the category:', error);
   }
 };
+
+const previousPage = computed(() => currentPage.value - 1);
 
 onMounted(async () => {
   try {
@@ -67,6 +63,7 @@ const paginatedCategories = computed(() => {
 });
 </script>
 
+
 <template>
   <div class="category-list">
     <h1>Liste des catégories</h1>
@@ -76,12 +73,12 @@ const paginatedCategories = computed(() => {
         placeholder="Rechercher une catégorie"
         class="input-custom"
       /> <br>
-    <button class="myButton" @click="showModal = true">Ajouter une catégorie</button>
+      <button class="myButton" @click="showModal = true">Ajouter une catégorie</button>
     
     <!-- Modal -->
     <div v-if="showModal" class="modal">
       <div class="modal-content">
-        <h2>Ajouter/Modifier/Supprimer une catégorie</h2>
+        <h2>Ajouter une catégorie</h2>
         <form>
           <label for="name">Nom de la catégorie :</label>
           <input type="text" id="name" v-model="category.name" />
