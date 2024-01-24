@@ -1,74 +1,74 @@
 <script setup>
-import { onMounted, ref, computed } from 'vue';
-import { RouterLink } from 'vue-router';
-import ApiService from '@/api.js'
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
 
 const movies = ref([]);
-const itemPerPage = 3;
+const search = ref('');
 const currentPage = ref(1);
-const previousPage = computed(() => currentPage.value - 1);
 
 onMounted(async () => {
+  await getMovies(currentPage.value);
+});
+
+const getMovies = async (pageNumber) => {
   try {
-
-
-    const token = localStorage.getItem('token');
-    if (!token) {
-      this.$router.push('/');
-      return;
-    }
-
-    const response = await ApiService.getMovies({
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-      },
-    });
-
-    if (response.data && response.data['hydra:member']) {
-      movies.value = response.data['hydra:member'].map((movie) => ({
-        id: movie.id,
-        title: movie.title,
-        description: movie.description,
-        releaseDate: movie.releaseDate,
-      }));
-    }
+    const response = await axios.get(`https://127.0.0.1:8000/api/movies?page=${pageNumber}&title=${search.value}`);
+    movies.value = response.data['hydra:member'];
   } catch (error) {
-    console.error('Error fetching movies:', error);
+    console.error('Erreur lors de la récupération des films:', error);
   }
-});
+}
 
-const paginatedMovies = computed(() => {
-  const startIndex = (currentPage.value - 1) * itemPerPage;
-  const endIndex = startIndex + itemPerPage;
-  return movies.value.slice(startIndex, endIndex);
-});
+  const nextPage = () => {
+    currentPage.value++;
+    getMovies(currentPage.value);
+  }
 
+  const previousPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+    getMovies(currentPage.value);
+  }
+}
+
+  const searchMovie = () => {
+    currentPage.value = 1;
+    getMovies(currentPage.value);
+};
 </script>
 
 <template>
   <div class="movie-list">
-    <h1>Liste des Films</h1> <br> <br>
+    <h1>Liste des Films</h1>
+    <br> <br>
+    <div class="search">
+      <input type="text" v-model="search" placeholder="Rechercher un film" />
+      <button @click="searchMovie">Rechercher</button>
+    </div>
+    <br>
+    <div v-if="search">
+      <h2>Recherche : {{ search }}</h2>
+    </div>
+
     <ul class="movie-items">
-      <li v-for="movie in paginatedMovies" :key="movie.id" class="movie-item">
+      <li v-for="movie in movies" :key="movie.id" class="movie-item">
         <div class="movie-details">
           <h2>{{ movie.title }}</h2>
           <p>{{ movie.description }}</p>
-        </div>      
+        </div>
         <div class="movie-details">
           <RouterLink :to="{ name: 'movie-details', params: { id: movie.id } }">Voir les détails</RouterLink>
         </div>
+        <br>
       </li>
     </ul>
-    <br>
     <div class="pagination">
-      <button class="button-8" v-if="previousPage> 0" @click="currentPage--">Précédent </button>
-      <button class="button-8" @click="currentPage++">Suivant</button>
+      <button class="button-8" @click="previousPage">Page précédente</button>
+      <button class="button-8" @click="nextPage">Page suivante</button>
     </div>
+    <br>
   </div>
 </template>
-
 
 <style scoped>
 .movie-details {
@@ -153,4 +153,23 @@ const paginatedMovies = computed(() => {
   color: #2c5777;
 }
 
+.btn-openModal {
+  background-color: #e1ecf4;
+  margin-left: 10px;
+  border-radius: 3px;
+  border: 1px solid #7aa7c7;
+  box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+  box-sizing: border-box;
+  color: #000000;
+  cursor: pointer;
+  display: table;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.15385;
+  margin: auto;
+  outline: none;
+  padding: 8px .8em;
+  position: relative;
+}
 </style>

@@ -5,7 +5,6 @@ import { ref } from 'vue';
 let email = ref('');
 let password = ref('');
 
-// stocker le token dans le local storage 
 const login = async () => {
     const response = await axios(`https://127.0.0.1:8000/api/login_check`, {
       method: 'POST',
@@ -25,7 +24,7 @@ const login = async () => {
 
 <template>
   <div class="login-form">
-    <h1>Page de Connexion</h1>
+    <h1>Veuillez vous identifier :</h1>
     <form @submit.prevent="login" class="form">
       <div class="form-group">
         <label for="email">Nom d'utilisateur :</label>
@@ -73,20 +72,21 @@ label {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 3px;
-  background-color: #2a2a2a;
+  background-color: #e3e3e3;
 }
 
 .submit-button {
   width: 100%;
   padding: 10px;
-  color: #fff;
   border: none;
   border-radius: 3px;
+  background-color: #1e4b37;
   cursor: pointer;
+  color: white;
   transition: background-color 0.3s ease-in-out;
 }
 
 .submit-button:hover {
-  background-color: #0056b3;
+  background-color: #03bd7e;
 }
 </style>
