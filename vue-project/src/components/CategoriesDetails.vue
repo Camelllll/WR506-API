@@ -4,11 +4,18 @@ import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 const movies = ref([]);
+const categoryName = ref('');
 const route = useRoute();
 
 onMounted(async () => {
   try {
     const categoryId = route.params.id;
+
+    // Fetch category details
+    const categoryResponse = await ApiService.getCategoriesById(categoryId);
+    categoryName.value = categoryResponse.data.name;
+
+    // Fetch movies in the selected category
     const moviesResponse = await ApiService.getMovies({ category: categoryId });
     movies.value = moviesResponse.data;
   } catch (error) {
@@ -17,19 +24,18 @@ onMounted(async () => {
 });
 </script>
 
-
 <template>
   <div class="category-details">
-    <h1>Films de la catégorie choisie</h1>
+    <h1>Films de la catégorie {{ categoryName }}</h1>
     <ul class="movie-items">
-        <li v-for="movie in movies" :key="movie.id" class="movie-item">
-          <div class="movie-details">
-            <h2>{{ movie.title }}</h2>
-          </div>      
-          <div class="movie-details">
-            <RouterLink :to="{ name: 'movie-details', params: { id: movie.id } }">Voir les détails</RouterLink>
-          </div>
-        </li>
+      <li v-for="movie in movies" :key="movie.id" class="movie-item">
+        <div class="movie-details">
+          <h2>{{ movie.title }}</h2>
+        </div>      
+        <div class="movie-details">
+          <RouterLink :to="{ name: 'movie-details', params: { id: movie.id } }">Voir les détails</RouterLink>
+        </div>
+      </li>
     </ul>
   </div>
 </template>

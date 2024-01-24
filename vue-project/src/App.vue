@@ -13,6 +13,9 @@ import MoviesView from './views/MoviesView.vue';
         <RouterLink to="/actors">Acteurs</RouterLink>
         <RouterLink to="/movies">Films</RouterLink>
         <RouterLink to="/categories">Catégories</RouterLink>
+        <RouterLink to="/login">Connexion</RouterLink>
+        <RouterLink to="/register">Inscription</RouterLink>
+        <RouterLink to="/accueil"></RouterLink>
       </nav>
 
       <main>

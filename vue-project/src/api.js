@@ -10,6 +10,10 @@ export default {
     return apiClient.get('/movies');
   },
 
+  addCategory(categoryData) {
+    return apiClient.post('/categories', categoryData);
+  },
+
   getMovieById(movieId) {
     const url = `${'https://127.0.0.1:8000/api'}/movies/${movieId}`;
     return axios.get(url);
@@ -29,5 +33,5 @@ export default {
   getCategoriesById(categoryId) {
     const url = `${'https://127.0.0.1:8000/api'}/categories/${categoryId}`;
     return axios.get(url);
-  }, 
+  }
 };

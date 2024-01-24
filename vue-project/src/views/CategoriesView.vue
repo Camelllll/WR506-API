@@ -1,44 +1,53 @@
 <script setup>
-import ApiService from '@/api.js';
-import { onMounted, ref, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, computed, onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
+import ApiService from '@/api.js';
 
-const route = useRoute();
 const categories = ref([]);
 const searchQuery = ref('');
+const itemPerPage = 3;
+const currentPage = ref(1);
+const showModal = ref(false);
 const category = ref({
-    name: '',
+  name: '',
 });
 
-const addCategory = () => {
-    // Make an API call to add the category
-    ApiService.addCategory(category.name)
-      .then((response) => {
-        const newCategory = {
-          id: response.data.id,
-          name: response.data.name,
-        };
-        categories.value.push(newCategory);
-        category.name = ''; // Clear the input field
-        showModal.value = true; // Close the modal
-      })
-      .catch((error) => {
-        console.error('Error adding the category:', error);
-      });
-  };
+const addCategory = async () => {
+  try {
+    const response = await ApiService.addCategory({ name: category.value.name });
+    console.log('Category added successfully:', response.data);
+    showModal.value = false;
+  } catch (error) {
+    console.error('Error adding the category:', error);
+  }
+};
 
-onMounted(() => {
-  ApiService.getCategories()
-    .then((response) => {
+const previousPage = computed(() => currentPage.value - 1);
+
+onMounted(async () => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.$router.push('/');
+      return;
+    }
+
+    const response = await ApiService.getCategories({
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+      },
+    });
+
+    if (response.data && response.data['hydra:member']) {
       categories.value = response.data['hydra:member'].map((category) => ({
         id: category.id,
         name: category.name,
       }));
-    })
-    .catch((error) => {
-      console.error('Erreur lors de la récupération des catégories depuis l\'API:', error)
-    });
+    }
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+  }
 });
 
 const filteredCategories = computed(() => {
@@ -47,46 +56,51 @@ const filteredCategories = computed(() => {
   );
 });
 
-const showModal = ref(false);
-
+const paginatedCategories = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemPerPage;
+  const endIndex = startIndex + itemPerPage;
+  return filteredCategories.value.slice(startIndex, endIndex);
+});
 </script>
+
 
 <template>
   <div class="category-list">
-    <h1>Liste des catégories</h1> <br>
+    <h1>Liste des catégories</h1>
     <input
         type="text"
         v-model="searchQuery"
         placeholder="Rechercher une catégorie"
         class="input-custom"
       /> <br>
-      <button class="myButton" @click="showModal = true">Ajouter une catégorie</button> <br>
+      <button class="myButton" @click="showModal = true">Ajouter une catégorie</button>
     
-      <!-- Modal -->
-      <div v-if="showModal" class="modal">
-        <div class="modal-content"> <br>
-          <h2>Ajouter/Modifier/Supprimer une catégorie</h2>
-          <form>
-            <label for="name">Nom de la catégorie :</label>
-            <input type="text" id="name" v-model="category.name" />
-            <button @click.prevent="addCategory">Ajouter</button>
-            <button class="btn-close" @click="showModal = false">Fermer</button>
-          </form>
-          
-        </div>
+    <!-- Modal -->
+    <div v-if="showModal" class="modal">
+      <div class="modal-content">
+        <h2>Ajouter une catégorie</h2>
+        <form>
+          <label for="name">Nom de la catégorie :</label>
+          <input type="text" id="name" v-model="category.name" />
+          <button @click.prevent="addCategory">Ajouter</button>
+          <button class="btn-close" @click="showModal = false">Fermer</button>
+        </form>
       </div>
-    <br>
+    </div>
     <ul class="category-items">
-    <li class="category-detail" v-for="cat in filteredCategories" :key="cat.id">
+      <li class="category-detail" v-for="cat in paginatedCategories" :key="cat.id">
         <div class="category-details">
           <h2>{{ cat.name }}</h2>
           <div class="movie-details">
-          <RouterLink :to="{ name: 'category-details', params: { id: cat.id } }"> Voir les films de cette catégorie </RouterLink>
+            <RouterLink :to="{ name: 'category-details', params: { id: cat.id } }"> Voir les films de cette catégorie </RouterLink>
+          </div>
         </div>
-        </div>
-
       </li>
     </ul>
+    <div class="pagination">
+      <button class="button-8" v-if="previousPage > 0" @click="currentPage--">Précédent </button>
+      <button class="button-8" @click="currentPage++">Suivant</button>
+    </div>
   </div>
 </template>
   
@@ -222,6 +236,48 @@ const showModal = ref(false);
 .myButton:active {
 	position:relative;
 	top:1px;
+}
+
+.button-8 {
+  background-color: #e1ecf4;
+  margin-left: 10px;
+  border-radius: 3px;
+  border: 1px solid #7aa7c7;
+  box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+  box-sizing: border-box;
+  color: #000000;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.15385;
+  margin: 0;
+  outline: none;
+  padding: 8px .8em;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+
+.button-8:hover,
+.button-8:focus {
+  background-color: #b3d3ea;
+  color: #2c5777;
+}
+
+.button-8:focus {
+  box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+}
+
+.button-8:active {
+  background-color: #a0c7e4;
+  box-shadow: none;
+  color: #2c5777;
 }
 </style>
 
