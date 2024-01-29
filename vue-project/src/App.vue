@@ -1,7 +1,5 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import ActorsView from './views/ActorsView.vue';
-import MoviesView from './views/MoviesView.vue';
 
 </script>
 
@@ -14,7 +12,6 @@ import MoviesView from './views/MoviesView.vue';
         <RouterLink to="/movies">Films</RouterLink>
         <RouterLink to="/categories">Catégories</RouterLink>
         <RouterLink to="/login">Connexion</RouterLink>
-        <RouterLink to="/register">Inscription</RouterLink>
         <RouterLink to="/accueil"></RouterLink>
       </nav>
 

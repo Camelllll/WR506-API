@@ -18,8 +18,6 @@ const login = async () => {
     location.href = '/accueil'
   };
 
-
-
 </script>
 
 <template>
