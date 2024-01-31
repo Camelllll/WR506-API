@@ -62,14 +62,57 @@ const getMovies = async (pageNumber) => {
       </li>
     </ul>
     <div class="pagination">
-      <button class="button-8" @click="previousPage">Page précédente</button>
-      <button class="button-8" @click="nextPage">Page suivante</button>
+      <button class="buttonprev" @click="previousPage">Page précédente</button>
+      <button class="buttonnext" @click="nextPage">Page suivante</button>
     </div>
     <br>
   </div>
 </template>
 
 <style scoped>
+
+.pagination{
+  text-align: center;
+  display: flex;
+}
+
+.buttonprev{
+  background-color: #e1ecf4;
+  margin-left: 10px;
+  border-radius: 3px;
+  border: 1px solid #7aa7c7;
+  box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+  box-sizing: border-box;
+  color: #000000;
+  cursor: pointer;
+  display: table;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.15385;
+  outline: none;
+  padding: 8px .8em;
+  position: relative;
+}
+
+.buttonnext{
+  background-color: #e1ecf4;
+  margin-left: 10px;
+  border-radius: 3px;
+  border: 1px solid #7aa7c7;
+  box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+  box-sizing: border-box;
+  color: #000000;
+  cursor: pointer;
+  display: table;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.15385;
+  outline: none;
+  padding: 8px .8em;
+  position: relative;
+}
 .movie-details {
   text-align: center;
 }
@@ -109,47 +152,6 @@ const getMovies = async (pageNumber) => {
 
 .movie-item .movie-details p {
   font-size: 14px;
-}
-.button-8 {
-  background-color: #e1ecf4;
-  margin-left: 10px;
-  border-radius: 3px;
-  border: 1px solid #7aa7c7;
-  box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
-  box-sizing: border-box;
-  color: #000000;
-  cursor: pointer;
-  display: inline-block;
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.15385;
-  margin: 0;
-  outline: none;
-  padding: 8px .8em;
-  position: relative;
-  text-align: center;
-  text-decoration: none;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  vertical-align: baseline;
-  white-space: nowrap;
-}
-
-.button-8:hover,
-.button-8:focus {
-  background-color: #b3d3ea;
-  color: #2c5777;
-}
-
-.button-8:focus {
-  box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
-}
-
-.button-8:active {
-  background-color: #a0c7e4;
-  box-shadow: none;
-  color: #2c5777;
 }
 
 .btn-openModal {

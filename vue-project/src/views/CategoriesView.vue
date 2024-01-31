@@ -106,7 +106,10 @@ const paginatedCategories = computed(() => {
   
   
 <style scoped>
-
+.category-list {
+  margin-left: 50px;
+  margin-top: 50px;
+}
 .category-details {
   text-align: center;
   margin: 20px;

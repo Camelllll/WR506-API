@@ -11,11 +11,9 @@ onMounted(async () => {
   try {
     const categoryId = route.params.id;
 
-    // Fetch category details
     const categoryResponse = await ApiService.getCategoriesById(categoryId);
     categoryName.value = categoryResponse.data.name;
 
-    // Fetch movies in the selected category
     const moviesResponse = await ApiService.getMovies({ category: categoryId });
     movies.value = moviesResponse.data;
   } catch (error) {
