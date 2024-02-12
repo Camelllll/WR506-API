@@ -27,11 +27,13 @@ export default {
     const url = `${'https://127.0.0.1:8000/api'}/actors/${actorId}`; 
     return axios.get(url);
   },
+
   getCategories() {
     return apiClient.get('/categories');
   },
+
   getCategoriesById(categoryId) {
     const url = `${'https://127.0.0.1:8000/api'}/categories/${categoryId}`;
     return axios.get(url);
-  }
+  },
 };

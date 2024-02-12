@@ -30,7 +30,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style scoped>
 .background {
-  background-image: url("https://wwwimage-intl.pplusstatic.com/thumbnails/photos/w1920-q80/cbs_page_attribute/upsell_fr_hero1_weblandscape_2560x1280_121423_1.jpg");
+  background-image: url("https://wwwimage-intl.pplusstatic.com/thumbnails/photos/w1920-q80/cbs_page_attribute/upsell_gen_hero1_weblandscape_2560x1280_012424_7.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

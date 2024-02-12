@@ -11,12 +11,19 @@ onMounted(() => {
   const actorId = route.params.id;
   ApiService.getActorsById(actorId)
     .then((response) => {
-      actor.value = response.data;
+      actor.value = {
+        ...response.data,
+        movies: response.data.movies.map(movie => ({
+          id: movie.id,
+          title: movie.title,
+        })),
+      };
     })
     .catch((error) => {
       console.error('Erreur lors de la récupération des détails de l\'acteur depuis l\'API:', error);
     });
 });
+
 </script>
 
 <template>

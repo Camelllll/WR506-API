@@ -36,6 +36,7 @@ onMounted(async () => {
 
 
 <template>
+  <div class="main">
   <div class="actor-list">
     <h1>Liste des Acteurs</h1>
    <br>
@@ -48,6 +49,7 @@ onMounted(async () => {
       </li>
     </ul>
   </div>
+</div>
 </template>
 
 
@@ -56,7 +58,13 @@ onMounted(async () => {
   text-align: center;
   padding: 20px;
 }
-
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: #181818;
+}
 .actor-items {
   list-style: none;
   padding: 0;

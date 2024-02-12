@@ -31,11 +31,12 @@ const updateMovie = async () => {
       title: movie.value.title,
       description: movie.value.description,
       duration: parseInt(movie.value.duration),
+      poster: movie.value.poster,
       releaseDate: movie.value.releaseDate 
     };
 
     const movieId = route.params.id;
-    const response = await axios.put(`https://127.0.0.1:8000/api/movies/${movieId}`, updatedMovie);
+    const response = await axios.patch(`https://127.0.0.1:8000/api/movies/${movieId}`, updatedMovie);
     console.log('Film mis à jour avec succès !', response.data);
     showModal.value = false;
   } catch (error) {
@@ -57,8 +58,6 @@ const updateMovie = async () => {
               <input type="text" id="description" v-model="movie.description" required class="input-field" />
               <label for="duration">Durée du film :</label>
               <input type="number" id="duration" v-model="movie.duration" required class="input-field" />
-              <label for="releaseDate">Date de sortie :</label>
-              <input type="date" id="releaseDate" v-model="movie.releaseDate" required class="input-field" />
               <br>
               <div class="align-btn">
                 <button type="submit" class="btn-close">Enregistrer</button>
@@ -72,6 +71,7 @@ const updateMovie = async () => {
       <p class="movie-release-date">Durée du film : {{ movie.duration }} minutes</p>
       <p class="movie-release-date">Date de sortie : {{ formatDate(movie.releaseDate) }}</p>
       <br>
+      <img :src="movie.poster" alt="Affiche du film" />
       <button class="btn-close" @click="showModal = true">Modifier</button>
       <br>
       <RouterLink to="/movies">Retour</RouterLink>
@@ -92,6 +92,12 @@ const updateMovie = async () => {
   .movie-title {
     font-size: 24px;
     margin-bottom: 20px;
+  }
+
+  img {
+    width: 300px;
+    height: 450px;
+    margin: 20px;
   }
   
   .movie-heading {

@@ -1,12 +1,16 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+
+const route = useRoute()
+
 </script>
 
 <template>
   <div class="background">
     <header>
       <RouterLink to="/accueil" class="deletBc">
-        <img alt="Paramount Logo" class="logo" src="@/assets/para.png" width="130" height="100" />
+        <img alt="Paramount Logo" class="logo" src="@/assets/para.png" width="120" height="50" />
       </RouterLink> 
       ｜ 
       <p class="title1">Regardez Maintenant</p>
@@ -15,17 +19,21 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/actors">Acteurs</RouterLink>
         <RouterLink to="/movies">Films</RouterLink>
         <RouterLink to="/categories">Catégories</RouterLink>
-        <RouterLink to="/login" class="btn-login">Connexion</RouterLink>
+        <RouterLink to="/login" class="btn-login">se connecter à paramount+</RouterLink>
         <RouterLink to="/accueil"></RouterLink>
       </nav>
     </header>
 
-    <RouterView />
+    <router-view />
   </div>
 </template>
 
 <style scoped>
 
+.navbar-actor {
+  background-color: white;
+  color: black;
+}
 .btn-login{
   -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
@@ -67,8 +75,8 @@ import { RouterLink, RouterView } from 'vue-router'
 header {
   line-height: 1.5;
   max-height: 100vh;
-  margin-left: -50px;
-  margin-top: -30px;
+  margin-left: 60px;
+  margin-top: 10px;
 }
 
 .deletBc:hover{
