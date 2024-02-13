@@ -4,6 +4,7 @@ import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
 const actors = ref([])
+const currentPage = ref(1);
 
 onMounted(async () => { 
   try {
@@ -25,12 +26,25 @@ onMounted(async () => {
         id: actor.id,
         firstName: actor.firstName,
         lastName: actor.lastName,
+        image: actor.image,
       }));
     }
   } catch (error) {
     console.error('Error fetching actors:', error);
   }
 });
+
+const nextPage = () => {
+  currentPage.value++;
+  getActors(currentPage.value);
+};
+
+const previousPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+    getActors(currentPage.value);
+  }
+};
 
 </script>
 
@@ -43,12 +57,17 @@ onMounted(async () => {
     <ul class="actor-items">
       <li v-for="actor in actors" :key="actor.id" class="actor-item">
         <div class="actor-details">
-          <h2>{{ actor.firstName }} {{ actor.lastName }}</h2> 
+          <h2>{{ actor.firstName }} {{ actor.lastName }}</h2> <br>
+          <img :src="actor.image" alt="Image" />
         </div>
         <RouterLink :to="{ name: 'actor-details', params: { id: actor.id } }">Voir les détails</RouterLink>
       </li>
     </ul>
   </div>
+</div>
+<div class="pagination">
+  <button class="buttonprev" @click="previousPage">Page précédente</button>
+  <button class="buttonnext" @click="nextPage">Page suivante</button>
 </div>
 </template>
 
@@ -57,6 +76,13 @@ onMounted(async () => {
 .actor-list {
   text-align: center;
   padding: 20px;
+}
+
+.actor-item img {
+  width: 100%;
+  height: 300px; 
+  object-fit: cover; 
+  border-radius: 5px; 
 }
 .main {
   display: flex;
@@ -94,6 +120,7 @@ onMounted(async () => {
 .actor-item .actor-details h2 {
   margin-top: 0;
   font-size: 18px;
+  font-weight: 600;
 }
 
 .actor-item .actor-details p {

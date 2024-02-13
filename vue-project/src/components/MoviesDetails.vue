@@ -46,36 +46,44 @@ const updateMovie = async () => {
 </script>
 
 <template>
+  
+  <!-- Modal pour modifier les détails du film -->
+  <div v-if="showModal" class="modal">
+    <div class="modal-content">
+      <form @submit.prevent="updateMovie">
+        <label for="title">Titre du film {{ movie.title }}</label>
+        <input type="text" id="title" v-model="movie.title" required class="input-field" />
+        <label for="description">Description du film :</label>
+        <input type="text" id="description" v-model="movie.description" required class="input-field" />
+        <label for="duration">Durée du film :</label>
+        <input type="number" id="duration" v-model="movie.duration" required class="input-field" />
+        <br>
+        <div class="align-btn">
+          <button type="submit" class="btn-close">Enregistrer</button>
+          <button class="btn-close" @click="showModal = false">Fermer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div class="movie-details">
     <h1 class="movie-title">Détails du Film</h1>
-    <div v-if="movie">
-        <div v-if="showModal" class="modal">
-          <div class="modal-content">
-            <form @submit.prevent="updateMovie">
-              <label for="title">Titre du film {{ movie.title }}</label>
-              <input type="text" id="title" v-model="movie.title" required class="input-field" />
-              <label for="description">Description du film :</label>
-              <input type="text" id="description" v-model="movie.description" required class="input-field" />
-              <label for="duration">Durée du film :</label>
-              <input type="number" id="duration" v-model="movie.duration" required class="input-field" />
-              <br>
-              <div class="align-btn">
-                <button type="submit" class="btn-close">Enregistrer</button>
-                <button class="btn-close" @click="showModal = false">Fermer</button>
-              </div>
-            </form>
-          </div>
-        </div>
+    <div v-if="movie" class="details">
+      <div>
       <h2 class="movie-heading">{{ movie.title }}</h2>
-      <p class="movie-description">{{ movie.description }}</p>
+      <p class="movie-description">{{ movie.description }}</p> <br>
       <p class="movie-release-date">Durée du film : {{ movie.duration }} minutes</p>
       <p class="movie-release-date">Date de sortie : {{ formatDate(movie.releaseDate) }}</p>
       <br>
+      </div>
+      <div>
       <img :src="movie.poster" alt="Affiche du film" />
       <button class="btn-close" @click="showModal = true">Modifier</button>
       <br>
       <RouterLink to="/movies">Retour</RouterLink>
     </div>
+    </div>
+
     <div v-else>
       <p class="loading-message">Chargement en cours...</p>
     </div>
@@ -87,6 +95,12 @@ const updateMovie = async () => {
     text-align: center;
     padding: 20px;
     color: rgb(255, 255, 255);
+  }
+
+  .details {
+    display: flex;
+    margin-left: 300px;
+    margin-top: 50px;
   }
   
   .movie-title {
@@ -108,6 +122,7 @@ const updateMovie = async () => {
   .movie-description {
     font-size: 16px;
     margin-bottom: 10px;
+    width: 470px;
   }
   
   .movie-release-date {
