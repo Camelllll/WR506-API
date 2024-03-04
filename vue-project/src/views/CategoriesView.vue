@@ -12,6 +12,8 @@ const category = ref({
   name: '',
 });
 
+let search = ref('');
+
 const addCategory = async () => {
   try {
     const response = await ApiService.addCategory({ name: category.value.name });
@@ -66,15 +68,13 @@ const paginatedCategories = computed(() => {
 
 <template>
   <div class="category-list">
-    <h1>Liste des catégories</h1>
-    <input
-        type="text"
-        v-model="searchQuery"
-        placeholder="Rechercher une catégorie"
-        class="input-custom"
-      /> <br>
-      <button class="myButton" @click="showModal = true">Ajouter une catégorie</button>
-    
+    <h1>Liste des catégories</h1> <br>
+    <div class="search">
+      <input type="text" v-model="search" placeholder="Rechercher un film" />
+      <button @click="searchMovie">Rechercher</button>
+    </div> <br>
+    <button class="myButton" @click="showModal = true">Ajouter une catégorie</button>
+
     <!-- Modal -->
     <div v-if="showModal" class="modal">
       <div class="modal-content">
@@ -92,7 +92,11 @@ const paginatedCategories = computed(() => {
         <div class="category-details">
           <h2>{{ cat.name }}</h2>
           <div class="movie-details">
-            <RouterLink :to="{ name: 'category-details', params: { id: cat.id } }"> Voir les films de cette catégorie </RouterLink>
+            <ul>
+              <li v-for="movie in cat.movies" :key="movie.id">
+                <RouterLink :to="{ name: 'movie-details', params: { id: movie.id } }">{{ movie.title }}</RouterLink>
+              </li>
+            </ul>
           </div>
         </div>
       </li>
@@ -103,10 +107,42 @@ const paginatedCategories = computed(() => {
     </div>
   </div>
 </template>
+
   
   
 <style scoped>
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #0056b3;
+  color: white;
+}
+.category-list {
+  margin-left: 50px;
+  margin-top: 50px;
+  text-align: center;
+}
 .category-details {
   text-align: center;
   margin: 20px;
@@ -119,11 +155,6 @@ const paginatedCategories = computed(() => {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.movie-list {
-  text-align: center;
-  padding: 20px;
-}
-
 .category-items {
   list-style: none;
   padding: 0;
@@ -131,18 +162,7 @@ const paginatedCategories = computed(() => {
   flex-wrap: wrap;
   justify-content: center;
   color: rgb(255, 255, 255);
-}
-.input-custom {
-  width: 20%;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: rgb(92, 92, 92);
-  color: white;
-  margin-bottom: 20px;
-  font-size: 16px;
-  box-sizing: border-box;
-}
+}   
 
 .modal {
   position: fixed;
@@ -184,6 +204,8 @@ const paginatedCategories = computed(() => {
   margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  margin-right: 15px;
+  text-align: left; 
 }
 
 .modal button {
@@ -278,6 +300,40 @@ const paginatedCategories = computed(() => {
   background-color: #a0c7e4;
   box-shadow: none;
   color: #2c5777;
+}
+
+.search input[type="text"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s, border-color 0.3s;
+  width: 300px;
+  margin-right: 15px;
+}
+
+.search input[type="text"]:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.search button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search button:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+
 }
 </style>
 

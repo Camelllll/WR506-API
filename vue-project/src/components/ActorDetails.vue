@@ -11,12 +11,20 @@ onMounted(() => {
   const actorId = route.params.id;
   ApiService.getActorsById(actorId)
     .then((response) => {
-      actor.value = response.data;
+      actor.value = {
+        ...response.data,
+        movies: response.data.movies.map(movie => ({
+          id: movie.id,
+          title: movie.title,
+          poster: movie.poster,
+        })),
+      };
     })
     .catch((error) => {
       console.error('Erreur lors de la récupération des détails de l\'acteur depuis l\'API:', error);
     });
 });
+
 </script>
 
 <template>
@@ -29,7 +37,7 @@ onMounted(() => {
         <ul>
           <template v-if="actor.movies && actor.movies.length">
             <li v-for="movie in actor.movies" :key="movie.id">
-              <RouterLink :to="{ name: 'movie-details', params: { id: movie.id } }">
+              <RouterLink :to="{ name: 'movie-details', params: { id: movie.id } }" class="details-button">
                 {{ movie.title }}
               </RouterLink>
             </li>
@@ -48,6 +56,22 @@ onMounted(() => {
   text-align: center;
   padding: 20px;
 }
+
+.details-button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-top: 10px;
+  color: white;
+  background-color: #1e4b37;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.details-button:hover {
+  background-color: #03bd7e;
+}
+
 
 .actor-details h1 {
   font-size: 24px;

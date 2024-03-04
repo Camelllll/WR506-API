@@ -1,6 +1,13 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const openMovieDetails = (id) => {
+  router.push({ name: 'movie-details', params: { id } })
+}
 
 const movies = ref([]);
 const search = ref('');
@@ -49,27 +56,43 @@ const getMovies = async (pageNumber) => {
     <div v-if="search">
       <h2>Recherche : {{ search }}</h2>
     </div>
-
     <ul class="movie-items">
       <li v-for="movie in movies" :key="movie.id" class="movie-item">
         <div class="movie-details">
-          <h2>{{ movie.title }}</h2>
+          <img :src="movie.poster" @click="openMovieDetails(movie.id)" />
         </div>
-        <div class="movie-details">
-          <RouterLink :to="{ name: 'movie-details', params: { id: movie.id } }">Voir les détails</RouterLink>
-        </div>
-        <br>
       </li>
     </ul>
+
     <div class="pagination">
-      <button class="button-8" @click="previousPage">Page précédente</button>
-      <button class="button-8" @click="nextPage">Page suivante</button>
+      <button class="buttonprev" @click="previousPage">Page précédente</button>
+      <button class="buttonnext" @click="nextPage">Page suivante</button>
     </div>
     <br>
   </div>
 </template>
 
 <style scoped>
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.buttonprev, .buttonnext {
+  background-color: #1e4dce;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.buttonprev:hover, .buttonnext:hover {
+  background-color: #070fb2;
+}
 .movie-details {
   text-align: center;
 }
@@ -83,24 +106,26 @@ const getMovies = async (pageNumber) => {
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
   color: rgb(255, 255, 255);
 }
 
-.movie-item {
-  margin: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  width: 300px;
-  text-align: left;
-  background-color: #404040;
+img {
+  width: 200px; 
+  height: 300px; 
+  margin-left: 5px;
+  object-fit: cover;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 50px;
+  transition: transform 0.3s ease; 
 }
 
-.movie-item .movie-image img {
-  max-width: 100%;
-  height: auto;
+img:hover {
+  transform: scale(1.05);
+}
+
+img:active {
+  transform: scale(0.95);
 }
 
 .movie-item .movie-details h2 {
@@ -110,48 +135,35 @@ const getMovies = async (pageNumber) => {
 .movie-item .movie-details p {
   font-size: 14px;
 }
-.button-8 {
-  background-color: #e1ecf4;
-  margin-left: 10px;
-  border-radius: 3px;
-  border: 1px solid #7aa7c7;
-  box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
-  box-sizing: border-box;
-  color: #000000;
-  cursor: pointer;
-  display: inline-block;
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.15385;
-  margin: 0;
+.search input[type="text"] {
+  padding: 10px;
+  margin-right: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s, border-color 0.3s;
+  width: 300px;
+}
+
+.search input[type="text"]:focus {
   outline: none;
-  padding: 8px .8em;
-  position: relative;
-  text-align: center;
-  text-decoration: none;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  vertical-align: baseline;
-  white-space: nowrap;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
-.button-8:hover,
-.button-8:focus {
-  background-color: #b3d3ea;
-  color: #2c5777;
+.search button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.button-8:focus {
-  box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+.search button:hover {
+  background-color: #0056b3;
 }
-
-.button-8:active {
-  background-color: #a0c7e4;
-  box-shadow: none;
-  color: #2c5777;
-}
-
 .btn-openModal {
   background-color: #e1ecf4;
   margin-left: 10px;
@@ -170,5 +182,21 @@ const getMovies = async (pageNumber) => {
   outline: none;
   padding: 8px .8em;
   position: relative;
+}
+
+@media (max-width: 768px) {
+  .movie-items {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  .search input[type="text"] {
+    width: 100%;
+  }
 }
 </style>
