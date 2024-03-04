@@ -22,7 +22,7 @@ const formatDate = (date) => {
 onMounted(async () => {
   try {
     const movieId = route.params.id;
-    const responseMovie = await axios.get(`https://127.0.0.1:8000/api/movies/${movieId}`);
+    const responseMovie = await axios.get(`http://movieapi.camelientrn.fr/api/movies/${movieId}`);
     movie.value = responseMovie.data;
 
     editedMovie.value.title = movie.value.title;
@@ -35,7 +35,7 @@ onMounted(async () => {
 
 const updateMovie = async () => {
   try {
-    const response = await axios.patch(`https://127.0.0.1:8000/api/movies/${movie.value.id}`, {
+    const response = await axios.patch(`http://movieapi.camelientrn.fr/api/movies/${movie.value.id}`, {
       'title': `${editedMovie.value.title}`,
       'description': `${editedMovie.value.description}`,
     }, {
@@ -52,7 +52,7 @@ const updateMovie = async () => {
 
 const deleteMovie = async () => {
   try {
-    const response = await axios.delete(`https://127.0.0.1:8000/api/movies/${movie.value.id}`);
+    const response = await axios.delete(`http://movieapi.camelientrn.fr/api/movies/${movie.value.id}`);
     console.log('Film supprimé avec succès !', response.data);
     router.push('/movies'); 
   } catch (error) {
