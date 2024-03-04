@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { RouterLink, useRoute } from 'vue-router';
+import { RouterLink, useRoute, useRouter } from 'vue-router'; 
 import moment from 'moment';
 import 'moment/locale/fr';
 import axios from 'axios';
@@ -8,9 +8,11 @@ import ApiService from '@/api.js';
 
 
 const route = useRoute();
+const router = useRouter();
 const movie = ref(null);
 const showModal = ref(false);
 const editedMovie = ref({});
+
 
 const formatDate = (date) => {
   moment.locale('fr');
@@ -45,6 +47,16 @@ const updateMovie = async () => {
     showModal.value = false;
   } catch (error) {
     console.error('Erreur lors de la mise à jour du film:', error);
+  }
+};
+
+const deleteMovie = async () => {
+  try {
+    const response = await axios.delete(`https://127.0.0.1:8000/api/movies/${movie.value.id}`);
+    console.log('Film supprimé avec succès !', response.data);
+    router.push('/movies'); 
+  } catch (error) {
+    console.error('Erreur lors de la suppression du film:', error);
   }
 };
 </script>
@@ -83,7 +95,10 @@ const updateMovie = async () => {
       </div>
       <div>
       <img :src="movie.poster" alt="Affiche du film" />
-      <button class="btn-close" @click="showModal = true">Modifier</button>
+      <div class="align-btn">
+        <button class="btn-close" @click="showModal = true">Modifier</button>
+        <button class="btn-close" @click="deleteMovie">Supprimer</button> 
+      </div>
       <br>
       <RouterLink to="/movies">Retour</RouterLink>
     </div>
@@ -137,6 +152,11 @@ const updateMovie = async () => {
   .loading-message {
     font-size: 18px;
   }
+
+.align-btn {
+  display: flex;
+  justify-content: space-between;
+}
 
 .modal {
   display: block;

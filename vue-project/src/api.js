@@ -14,6 +14,10 @@ export default {
     return apiClient.patch(`/movies/${movieId}`, movieData);
   },
 
+  deleteMovie(movieId) {
+    return apiClient.delete(`/movies/${movieId}`);
+  },
+
   addCategory(categoryData) {
     return apiClient.post('/categories', categoryData);
   },
