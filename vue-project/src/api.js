@@ -23,7 +23,7 @@ export default {
   },
 
   getMovieById(movieId) {
-    const url = `${'http://movieapi.camelientrn.fr/api'}/movies/${movieId}`;
+    const url = `${'https://movieapi.camelientrn.fr/api'}/movies/${movieId}`;
     return axios.get(url);
   },
 
@@ -32,7 +32,7 @@ export default {
   },
 
   getActorsById(actorId) {
-    const url = `${'http://movieapi.camelientrn.fr/api'}/actors/${actorId}`; 
+    const url = `${'https://movieapi.camelientrn.fr/api'}/actors/${actorId}`; 
     return axios.get(url);
   },
 
@@ -41,7 +41,7 @@ export default {
   },
 
   getCategoriesById(categoryId) {
-    const url = `${'http://movieapi.camelientrn.fr/api'}/categories/${categoryId}`;
+    const url = `${'https://movieapi.camelientrn.fr/api'}/categories/${categoryId}`;
     return axios.get(url);
   },
 };

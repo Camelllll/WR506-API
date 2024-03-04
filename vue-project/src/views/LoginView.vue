@@ -6,7 +6,7 @@ let email = ref('');
 let password = ref('');
 
 const login = async () => {
-    const response = await axios(`http://movieapi.camelientrn.fr/api/login_check`, {
+    const response = await axios(`https://movieapi.camelientrn.fr/api/login_check`, {
       method: 'POST',
       data: {
         email: email.value,

@@ -19,7 +19,7 @@ onMounted(async () => {
 
 const getMovies = async (pageNumber) => {
   try {
-    const response = await axios.get(`http://movieapi.camelientrn.fr/api/movies?page=${pageNumber}&title=${search.value}`);
+    const response = await axios.get(`https://movieapi.camelientrn.fr/api/movies?page=${pageNumber}&title=${search.value}`);
     movies.value = response.data['hydra:member'];
   } catch (error) {
     console.error('Erreur lors de la récupération des films:', error);
