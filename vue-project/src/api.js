@@ -10,6 +10,10 @@ export default {
     return apiClient.get('/movies');
   },
 
+  updateMovie(movieId, movieData) {
+    return apiClient.patch(`/movies/${movieId}`, movieData);
+  },
+
   addCategory(categoryData) {
     return apiClient.post('/categories', categoryData);
   },

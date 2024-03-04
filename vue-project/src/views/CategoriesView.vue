@@ -90,7 +90,6 @@ const paginatedCategories = computed(() => {
         <div class="category-details">
           <h2>{{ cat.name }}</h2>
           <div class="movie-details">
-            <RouterLink :to="{ name: 'category-details', params: { id: cat.id } }"> Voir les films de cette catégorie </RouterLink>
             <ul>
               <li v-for="movie in cat.movies" :key="movie.id">
                 <RouterLink :to="{ name: 'movie-details', params: { id: movie.id } }">{{ movie.title }}</RouterLink>
@@ -110,6 +109,33 @@ const paginatedCategories = computed(() => {
   
   
 <style scoped>
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #0056b3;
+  color: white;
+}
 .category-list {
   margin-left: 50px;
   margin-top: 50px;

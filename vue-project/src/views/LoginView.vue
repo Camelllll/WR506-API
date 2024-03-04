@@ -21,6 +21,7 @@ const login = async () => {
 </script>
 
 <template>
+<div class="login-page">
   <div class="login-form">
     <h1>Veuillez vous identifier :</h1>
     <form @submit.prevent="login" class="form">
@@ -37,9 +38,17 @@ const login = async () => {
       </div>
     </form>
   </div>
+</div>
 </template>
 
 <style scoped>
+
+.login-page {
+  background-image: url("https://wwwimage-intl.pplusstatic.com/thumbnails/photos/w1920-q80/cbs_page_attribute/upsell_gen_hero1_weblandscape_2560x1280_012424_7.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+}
 .login-form {
   display: flex;
   flex-direction: column;

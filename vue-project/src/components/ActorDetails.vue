@@ -16,6 +16,7 @@ onMounted(() => {
         movies: response.data.movies.map(movie => ({
           id: movie.id,
           title: movie.title,
+          poster: movie.poster,
         })),
       };
     })
@@ -36,7 +37,7 @@ onMounted(() => {
         <ul>
           <template v-if="actor.movies && actor.movies.length">
             <li v-for="movie in actor.movies" :key="movie.id">
-              <RouterLink :to="{ name: 'movie-details', params: { id: movie.id } }">
+              <RouterLink :to="{ name: 'movie-details', params: { id: movie.id } }" class="details-button">
                 {{ movie.title }}
               </RouterLink>
             </li>
@@ -55,6 +56,22 @@ onMounted(() => {
   text-align: center;
   padding: 20px;
 }
+
+.details-button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-top: 10px;
+  color: white;
+  background-color: #1e4b37;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.details-button:hover {
+  background-color: #03bd7e;
+}
+
 
 .actor-details h1 {
   font-size: 24px;
