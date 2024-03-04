@@ -12,6 +12,8 @@ const category = ref({
   name: '',
 });
 
+let search = ref('');
+
 const addCategory = async () => {
   try {
     const response = await ApiService.addCategory({ name: category.value.name });
@@ -328,6 +330,10 @@ const paginatedCategories = computed(() => {
 
 .search button:hover {
   background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+
 }
 </style>
 

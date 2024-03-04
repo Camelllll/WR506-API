@@ -183,4 +183,20 @@ img:active {
   padding: 8px .8em;
   position: relative;
 }
+
+@media (max-width: 768px) {
+  .movie-items {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  .search input[type="text"] {
+    width: 100%;
+  }
+}
 </style>

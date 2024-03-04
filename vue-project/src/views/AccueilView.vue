@@ -93,4 +93,32 @@ import { RouterLink, RouterView } from 'vue-router'
   position: relative;
 }
 
+/* Responsive */
+
+@media (max-width: 768px) {
+  .includeInScrollTracking {
+    font-size: 40px;
+    margin-left: 30px;
+    margin-top: 120px;
+  }
+
+  .upsell-text, .hero__cta {
+    margin-left: 30px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .includeInScrollTracking {
+    font-size: 30px;
+    margin-left: 20px;
+    margin-top: 350px;
+  }
+
+  .upsell-text, .hero__cta {
+    margin-left: 20px;
+    font-size: 14px;
+  }
+}
+
 </style>

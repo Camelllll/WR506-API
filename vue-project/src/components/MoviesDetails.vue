@@ -255,4 +255,26 @@ input[type="date"]:focus {
   box-shadow: 0 0 5px rgba(30, 144, 255, 0.5);
 }
 
+@media (max-width: 768px) {
+  .details {
+    flex-direction: column;
+    align-items: center;
+    margin-left: 0;
+    margin-top: 20px;
+  }
+
+  img {
+    width: 80%;
+    height: auto;
+  }
+
+  .movie-description {
+    width: 90%;
+  }
+
+  .modal-content {
+    width: 90%;
+  }
+}
+
 </style>

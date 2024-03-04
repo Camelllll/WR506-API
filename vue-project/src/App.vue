@@ -1,9 +1,15 @@
 <script setup>
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
+import { ref } from 'vue'
 
 const route = useRoute()
 
+let navOpen = ref(false)
+
+const toggleNav = () => {
+  navOpen.value = !navOpen.value
+}
 </script>
 
 <template>
@@ -12,10 +18,15 @@ const route = useRoute()
       <RouterLink to="/accueil" class="deletBc">
         <img alt="Paramount Logo" class="logo" src="@/assets/para.png" width="120" height="50" />
       </RouterLink> 
-      ｜ 
+      <div class="bar">｜</div>
       <p class="title1">Regardez Maintenant</p>
+      <div class="burger" @click="toggleNav">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
 
-      <nav class="align-class">
+      <nav class="align-class" :class="{ open: navOpen }">
         <RouterLink to="/actors">Acteurs</RouterLink>
         <RouterLink to="/movies">Films</RouterLink>
         <RouterLink to="/categories">Catégories</RouterLink>
@@ -137,6 +148,89 @@ nav a:hover {
     font-size: 1rem;
     margin-left: 615px;
     padding: 1rem 0;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .title1 {
+    display: none;
+  }
+
+  .bar {
+    display: none;
+  }
+
+  .align-class {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  nav a {
+    padding: 10px 0;
+    border-left: none;
+    border-top: 1px solid var(--color-border);
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    margin-left: 20px;
+  }
+
+  .logo {
+    width: 80px;
+    height: 30px;
+    margin-top: 20px;
+  }
+
+  .title1 {
+    font-size: 12px;
+  }
+
+  .btn-login {
+    padding: 10px 20px;
+    font-size: 12px;
+  }
+
+  nav a {
+    font-size: 14px;
+  }
+}
+
+.burger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  margin-left: 340px;
+}
+
+.burger div {
+  width: 2rem;
+  height: 0.25rem;
+  background: white;
+}
+
+@media (max-width: 768px) {
+  .burger {
+    display: flex;
+  }
+
+  .align-class {
+    flex-direction: column;
+    display: none;
+  }
+
+  .align-class.open {
+    display: flex;
   }
 }
 </style>
