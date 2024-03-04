@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://movieapi.camelientrn.fr/api',
+  baseURL: 'https://movieapi.camelientrn.fr/api',
   timeout: 10000,
 });
 
