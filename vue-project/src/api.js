@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'https://127.0.0.1:8000/api',
+  baseURL: 'http://movieapi.camelientrn.fr/api',
   timeout: 10000,
 });
 
@@ -23,7 +23,7 @@ export default {
   },
 
   getMovieById(movieId) {
-    const url = `${'https://127.0.0.1:8000/api'}/movies/${movieId}`;
+    const url = `${'http://movieapi.camelientrn.fr/api'}/movies/${movieId}`;
     return axios.get(url);
   },
 
@@ -32,7 +32,7 @@ export default {
   },
 
   getActorsById(actorId) {
-    const url = `${'https://127.0.0.1:8000/api'}/actors/${actorId}`; 
+    const url = `${'http://movieapi.camelientrn.fr/api'}/actors/${actorId}`; 
     return axios.get(url);
   },
 
@@ -41,7 +41,7 @@ export default {
   },
 
   getCategoriesById(categoryId) {
-    const url = `${'https://127.0.0.1:8000/api'}/categories/${categoryId}`;
+    const url = `${'http://movieapi.camelientrn.fr/api'}/categories/${categoryId}`;
     return axios.get(url);
   },
 };
