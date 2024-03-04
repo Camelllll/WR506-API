@@ -1,10 +1,10 @@
-# WR506-API
+# WR506-API ✨
 
 ## Description du projet
 
 Voici le projet WR506, un projet d'API qui gère les films, acteurs, catégories et une page de connexion, j'ai décidé de faire ce site en exemple de Paramount+.
 
-## Installation
+## Installation 👈🏻
 
 Pour installer le projet :
 
