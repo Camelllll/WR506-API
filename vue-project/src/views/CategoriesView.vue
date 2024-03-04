@@ -1,44 +1,55 @@
 <script setup>
-import ApiService from '@/api.js';
-import { onMounted, ref, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, computed, onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
+import ApiService from '@/api.js';
 
-const route = useRoute();
 const categories = ref([]);
 const searchQuery = ref('');
+const itemPerPage = 3;
+const currentPage = ref(1);
+const showModal = ref(false);
 const category = ref({
-    name: '',
+  name: '',
 });
 
-const addCategory = () => {
-    // Make an API call to add the category
-    ApiService.addCategory(category.name)
-      .then((response) => {
-        const newCategory = {
-          id: response.data.id,
-          name: response.data.name,
-        };
-        categories.value.push(newCategory);
-        category.name = ''; // Clear the input field
-        showModal.value = true; // Close the modal
-      })
-      .catch((error) => {
-        console.error('Error adding the category:', error);
-      });
-  };
+let search = ref('');
 
-onMounted(() => {
-  ApiService.getCategories()
-    .then((response) => {
+const addCategory = async () => {
+  try {
+    const response = await ApiService.addCategory({ name: category.value.name });
+    console.log('Category added successfully:', response.data);
+    showModal.value = false;
+  } catch (error) {
+    console.error('Error adding the category:', error);
+  }
+};
+
+const previousPage = computed(() => currentPage.value - 1);
+
+onMounted(async () => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.$router.push('/');
+      return;
+    }
+
+    const response = await ApiService.getCategories({
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+      },
+    });
+
+    if (response.data && response.data['hydra:member']) {
       categories.value = response.data['hydra:member'].map((category) => ({
         id: category.id,
         name: category.name,
       }));
-    })
-    .catch((error) => {
-      console.error('Erreur lors de la récupération des catégories depuis l\'API:', error)
-    });
+    }
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+  }
 });
 
 const filteredCategories = computed(() => {
@@ -47,52 +58,91 @@ const filteredCategories = computed(() => {
   );
 });
 
-const showModal = ref(false);
-
+const paginatedCategories = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemPerPage;
+  const endIndex = startIndex + itemPerPage;
+  return filteredCategories.value.slice(startIndex, endIndex);
+});
 </script>
+
 
 <template>
   <div class="category-list">
     <h1>Liste des catégories</h1> <br>
-    <input
-        type="text"
-        v-model="searchQuery"
-        placeholder="Rechercher une catégorie"
-        class="input-custom"
-      /> <br>
-      <button class="myButton" @click="showModal = true">Ajouter une catégorie</button> <br>
-    
-      <!-- Modal -->
-      <div v-if="showModal" class="modal">
-        <div class="modal-content"> <br>
-          <h2>Ajouter/Modifier/Supprimer une catégorie</h2>
-          <form>
-            <label for="name">Nom de la catégorie :</label>
-            <input type="text" id="name" v-model="category.name" />
-            <button @click.prevent="addCategory">Ajouter</button>
-            <button class="btn-close" @click="showModal = false">Fermer</button>
-          </form>
-          
-        </div>
+    <div class="search">
+      <input type="text" v-model="search" placeholder="Rechercher un film" />
+      <button @click="searchMovie">Rechercher</button>
+    </div> <br>
+    <button class="myButton" @click="showModal = true">Ajouter une catégorie</button>
+
+    <!-- Modal -->
+    <div v-if="showModal" class="modal">
+      <div class="modal-content">
+        <h2>Ajouter une catégorie</h2>
+        <form>
+          <label for="name">Nom de la catégorie :</label>
+          <input type="text" id="name" v-model="category.name" />
+          <button @click.prevent="addCategory">Ajouter</button>
+          <button class="btn-close" @click="showModal = false">Fermer</button>
+        </form>
       </div>
-    <br>
+    </div>
     <ul class="category-items">
-    <li class="category-detail" v-for="cat in filteredCategories" :key="cat.id">
+      <li class="category-detail" v-for="cat in paginatedCategories" :key="cat.id">
         <div class="category-details">
           <h2>{{ cat.name }}</h2>
           <div class="movie-details">
-          <RouterLink :to="{ name: 'category-details', params: { id: cat.id } }"> Voir les films de cette catégorie </RouterLink>
+            <ul>
+              <li v-for="movie in cat.movies" :key="movie.id">
+                <RouterLink :to="{ name: 'movie-details', params: { id: movie.id } }">{{ movie.title }}</RouterLink>
+              </li>
+            </ul>
+          </div>
         </div>
-        </div>
-
       </li>
     </ul>
+    <div class="pagination">
+      <button class="button-8" v-if="previousPage > 0" @click="currentPage--">Précédent </button>
+      <button class="button-8" @click="currentPage++">Suivant</button>
+    </div>
   </div>
 </template>
+
   
   
 <style scoped>
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #0056b3;
+  color: white;
+}
+.category-list {
+  margin-left: 50px;
+  margin-top: 50px;
+  text-align: center;
+}
 .category-details {
   text-align: center;
   margin: 20px;
@@ -105,11 +155,6 @@ const showModal = ref(false);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.movie-list {
-  text-align: center;
-  padding: 20px;
-}
-
 .category-items {
   list-style: none;
   padding: 0;
@@ -117,18 +162,7 @@ const showModal = ref(false);
   flex-wrap: wrap;
   justify-content: center;
   color: rgb(255, 255, 255);
-}
-.input-custom {
-  width: 20%;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: rgb(92, 92, 92);
-  color: white;
-  margin-bottom: 20px;
-  font-size: 16px;
-  box-sizing: border-box;
-}
+}   
 
 .modal {
   position: fixed;
@@ -170,6 +204,8 @@ const showModal = ref(false);
   margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  margin-right: 15px;
+  text-align: left; 
 }
 
 .modal button {
@@ -222,6 +258,82 @@ const showModal = ref(false);
 .myButton:active {
 	position:relative;
 	top:1px;
+}
+
+.button-8 {
+  background-color: #e1ecf4;
+  margin-left: 10px;
+  border-radius: 3px;
+  border: 1px solid #7aa7c7;
+  box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+  box-sizing: border-box;
+  color: #000000;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.15385;
+  margin: 0;
+  outline: none;
+  padding: 8px .8em;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+
+.button-8:hover,
+.button-8:focus {
+  background-color: #b3d3ea;
+  color: #2c5777;
+}
+
+.button-8:focus {
+  box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+}
+
+.button-8:active {
+  background-color: #a0c7e4;
+  box-shadow: none;
+  color: #2c5777;
+}
+
+.search input[type="text"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s, border-color 0.3s;
+  width: 300px;
+  margin-right: 15px;
+}
+
+.search input[type="text"]:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.search button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search button:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+
 }
 </style>
 

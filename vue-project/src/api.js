@@ -10,6 +10,14 @@ export default {
     return apiClient.get('/movies');
   },
 
+  updateMovie(movieId, movieData) {
+    return apiClient.patch(`/movies/${movieId}`, movieData);
+  },
+
+  addCategory(categoryData) {
+    return apiClient.post('/categories', categoryData);
+  },
+
   getMovieById(movieId) {
     const url = `${'https://127.0.0.1:8000/api'}/movies/${movieId}`;
     return axios.get(url);
@@ -23,11 +31,13 @@ export default {
     const url = `${'https://127.0.0.1:8000/api'}/actors/${actorId}`; 
     return axios.get(url);
   },
+
   getCategories() {
     return apiClient.get('/categories');
   },
+
   getCategoriesById(categoryId) {
     const url = `${'https://127.0.0.1:8000/api'}/categories/${categoryId}`;
     return axios.get(url);
-  }, 
+  },
 };
