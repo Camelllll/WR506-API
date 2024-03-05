@@ -184,11 +184,12 @@ nav a:hover {
   }
 
   .logo {
-    width: 80px;
-    height: 30px;
-    margin-top: 20px;
+    display: block;
+    margin: auto;
+    max-width: 100%;
+    margin-top: 50px;
+    height: auto;
   }
-
   .title1 {
     font-size: 12px;
   }
@@ -210,7 +211,7 @@ nav a:hover {
   width: 2rem;
   height: 2rem;
   cursor: pointer;
-  margin-left: 340px;
+  transition: all 0.3s ease;
 }
 
 .burger div {

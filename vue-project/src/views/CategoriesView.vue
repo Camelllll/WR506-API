@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { RouterLink } from 'vue-router';
+import { RouterLink } from 'vue-router'; 
+import { useRouter } from 'vue-router'
 import ApiService from '@/api.js';
 
 const categories = ref([]);
@@ -13,7 +14,7 @@ const category = ref({
 });
 
 let search = ref('');
-
+const router = useRouter()
 const addCategory = async () => {
   try {
     const response = await ApiService.addCategory({ name: category.value.name });
@@ -30,7 +31,7 @@ onMounted(async () => {
   try {
     const token = localStorage.getItem('token');
     if (!token) {
-      this.$router.push('/');
+      router.push('/login');
       return;
     }
 
@@ -139,7 +140,6 @@ const paginatedCategories = computed(() => {
   color: white;
 }
 .category-list {
-  margin-left: 50px;
   margin-top: 50px;
   text-align: center;
 }

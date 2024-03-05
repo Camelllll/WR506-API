@@ -14,6 +14,11 @@ const search = ref('');
 const currentPage = ref(1);
 
 onMounted(async () => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    router.push('/login');
+    return;
+  }
   await getMovies(currentPage.value);
 });
 

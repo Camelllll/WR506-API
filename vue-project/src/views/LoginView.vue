@@ -5,19 +5,26 @@ import { ref } from 'vue';
 let email = ref('');
 let password = ref('');
 
-const login = async () => {
-    const response = await axios(`https://movieapi.camelientrn.fr/api/login_check`, {
-      method: 'POST',
-      data: {
-        email: email.value,
-        password: password.value,
-      },
-  })
-    localStorage.setItem('token', response.data.token)
-    console.log(response.data.token)
-    location.href = '/accueil'
-  };
+const api = axios.create();
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
 
+const login = async () => {
+  const response = await api.post(`https://movieapi.camelientrn.fr/api/login_check`, {
+    email: email.value,
+    password: password.value,
+  });
+  localStorage.setItem('token', response.data.token);
+  console.log(response.data.token);
+  location.href = '/accueil';
+};
 </script>
 
 <template>

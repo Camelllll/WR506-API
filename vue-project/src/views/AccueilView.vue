@@ -17,11 +17,11 @@ import { RouterLink, RouterView } from 'vue-router'
       </strong>
     </div>
     <div class="hero__cta">
-      <a href="/movies" class="button focusable buttonWindows button__extra-large js-cta-tracking " aa-link="upsell|top|s’abonner À paramount+|||||||||||||||" target="_self">
-        <div class="button__text">
+      <div class="button__text">
+        <RouterLink to="/movies" class="button focusable buttonWindows button__extra-large js-cta-tracking " aa-link="upsell|top|s’abonner À paramount+|||||||||||||||">
           S’ABONNER À PARAMOUNT+ ET VOIR LES FILMS
-        </div>
-      </a>
+      </RouterLink>
+      </div>
     </div>
   </div>
   <RouterView />
