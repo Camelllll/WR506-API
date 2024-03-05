@@ -9,6 +9,7 @@ Voici le projet WR506, un projet d'API qui gère les films, acteurs, catégories
 Pour installer le projet :
 
 ```bash
+cd vue-project
 git clone https://github.com/Camelllll/WR506-API.git
 cd vue-project
 npm install
